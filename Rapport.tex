@@ -8,10 +8,11 @@
 \usepackage{chngcntr}
 \usepackage{float}
 \counterwithin*{section}{part}
+\usepackage[margin=2cm, bindingoffset=9mm]{geometry}
 
 \title{%
 	Projet d'électronique numérique \\
-	\large{visualiations musicales sur écran VGA}}
+	\large{Visualisations musicales par VGA}}
 \date\today
 \author{
 	\bsc{LESTANDI Nathan}
@@ -28,10 +29,14 @@
     \newpage
     \part*{Introduction}
     \addcontentsline{toc}{part}{Introduction}
-	A la suite de plusieurs séance de TPs d'approfondissement sur le langage de description vhdl dans l'environnement vivado, nous avons eu à imaginer et mener à bien un projet étalé sur 7 semaines à faire en binôme. Le choix étant assez libre et n'ayant que peu de contrainte liées à l'énoncer du projet, nous avons choisit de faire varier l'affichage d'un écran en fonction de la musique.\\
-	Dans un soucis d'efficacité et compte tenue de la charge de travail nous avons décidé d'utiliser le site Trello afin d'optimiser la répartition des tâches et de fixer des deadlines. Ce site nous auras permit de suivre l'avancement de notre binôme en sauvegardant de manière ordonnée le travail, ainsi que de garder une structure claire et de répertorié de nombreux éléments nécessaire à la rédaction d'un rapport.
+	A la suite de plusieurs séances de TPs d'approfondissement sur le langage de description VHDL dans l'environnement Vivado, nous avons eu à imaginer et mener à bien un projet étalé sur 7 semaines, en binôme. Le choix était assez libre et nous n'avions que peu de contrainte liées à l'énoncé du projet. Nous envisagions un sujet relié au son, car c'est un domaine qui nous intéresse tous les deux. Cependant, le traitement du son et notamment son acquisition et sa restitution sur la carte Artix 7 n'étant pas idéal, nous avons choisi de travailler sur un sujet à la croisée des chemins entre la synthèse vidéo et le traitement du son : un générateur de visualisations. Ce type de systèmes était très présent à une certaine époque sur les logiciels de lecture de fichiers sonores (Winamp, Windows Media Player, VLC etc.). De nos jours, c'est un domaine qui connaît un renouveau avec la pratique du VJing dans les performances de musique électronique.
+	
+	Cependant, étant donné notre niveau actuel de connaissances, du temps consacré aux projets et des limitations matérielles de la carte, les visualisations que nous avons réalisé sont très simplistes (voir le cahier des charges).
+	
+	De plus, Dans un souci d'efficacité et compte tenue de la complexité du sujet nous avons décidé d'utiliser le site Trello \cite{trello} afin de gérer la répartition des tâches et de fixer des deadlines. Ce site nous aura permis de suivre l'avancement de chacun en rendant régulièrement compte de notre travail, ainsi que de prendre des notes sur des éléments importants et des ressources.
+	
     \section{Cahier des charges}
-    Le cahier des charges imposé implique une machine d'état ainsi qu'une interface utilisateur. 
+    Le cahier des charges général du projet impose une machine d'état ainsi qu'une interface utilisateur.
     
     
     \section{Architecture}
@@ -39,11 +44,12 @@
     \includegraphics[width=\textwidth, keepaspectratio=true]{VHDL_project_global_diagram1.png}
     \caption{\label{global} Schéma global du système}
     \end{figure}
-    Dans la figure~\ref{global} page~\pageref{global}, …
+    % Dans la figure~\ref{global} page~\pageref{global}, …
     \newpage
     \part{DSP : analyse du son}
     \section{Filtre passe-bas}
     \subsection{modélisation et dimension du filtre}
+<<<<<<< 62f1e02b62a241022eeb430b22fb830f4cf2f62c
     Afin de réaliser un filtre passe-bas le moins encombrant possible et le plus facile à paramétrer, nous avons utilisé un filtre exponentielle du première ordre qui correspond à un filtre RC classique. En effet dans un RC la formule suivante apparait  : 
     \begin{center}
     	\begin{equation}
@@ -51,19 +57,30 @@
     	\end{equation}
     \end{center}
 	Si on pose $v_{in}=x_n,\ v_{out}=y_n$ et $\frac{dv_{out}}{dt}=\frac{y_n-y_{n-1}}{\Delta_T}$ on obtient
+=======
+    Afin de réaliser un filtre passe-bas le moins encombrant possible et le plus facile à paramétrer, nous avons utilisé un filtre exponentiel du premier ordre qui s'écrit de la manière suivante: 
+>>>>>>> corrections ortho
 	\begin{center}
 		\begin{equation}
 			y(n)=(1-\epsilon)y(n-1)+x(n)\times\epsilon ,\; \epsilon=\frac{\Delta_T}{RC+\Delta_T} \ \in [0,1]
 		\end{equation}
 	\end{center}    
+<<<<<<< 62f1e02b62a241022eeb430b22fb830f4cf2f62c
     Le filtre n'est composé que d'une seul variable : $\epsilon$, ça fréquence de coupure est définit par :
+=======
+    ce filtre correspond à un filtre RC,il ne possède qu'une seul variable : $\epsilon$, sa fréquence de coupure est définie par :
+>>>>>>> corrections ortho
     \begin{center}
     	\begin{equation}
     	fc=\frac{-ln(1-\epsilon)}{2\pi}\times f_{fonctionnement}
     	\label{fc}
     	\end{equation}
     \end{center}    
+<<<<<<< 62f1e02b62a241022eeb430b22fb830f4cf2f62c
     Cependant sous cette forme un déphasage est induit en haute fréquences. Pour remédier à ce problème,nous allons moyenner l'entrée avec l'échantillon précédent soit :
+=======
+    Cependant sous cette forme un déphasage est induit dans les haute fréquences. Pour remédier à ce problème, nous allons moyenner l'entrée avec l'échantillon précédent soit :
+>>>>>>> corrections ortho
 	\begin{center}
 		\begin{equation}
 			y(n)=(1-\epsilon)y(n-1)+\frac{(x(n)+x(n-1))\times\epsilon}{2}
@@ -72,22 +89,28 @@
 	\end{center}  
     
     Sachant que nous travaillons sur une architecture numérique, il faut éviter les multiplication/divisions. Pour $\epsilon$ nous avons choisit de prendre des valeurs multiple de deux afin de limiter les opérations à des décalages.    
-    Pour déterminer les $\epsilon$ de tout les filtres on prends comme fréquence de référence celle du enable qui dépend du module de gestion de la carte sd, soit 44100Khz. Un epsilon de $2^{-4}=0.625$ permettra de couper à environ 450Hz tout en laissant les opération faites dans le filtre être de simple décalage.
+    Pour déterminer les $\epsilon$ de tous les filtres on prend comme fréquence de référence celle du \textit{enable} qui dépend du module de gestion de la carte SD, soit 44100Hz. Un $\epsilon$ de $2^{-4}=0.625$ permettra de couper à environ 450Hz tout en laissant les opération faites dans le filtre être de simple décalage.
     \begin{figure}[H]
     	\centering
     	 		\includegraphics[width=12cm,
-    	 		keepaspectratio=true]{filtre_passe_bas.PNG}
-    	\caption{\label{passe_bas}schéma bloc passe-bas}
+    	 		keepaspectratio=true]{filtre_passe_bas.png}
+    	\caption{\label{passe_bas}Schéma-bloc passe-bas}
     \end{figure}
+<<<<<<< 62f1e02b62a241022eeb430b22fb830f4cf2f62c
    	On commence par synchronisé le circuit avec une bascule D, les autres bascules serviront à obtenir les valeurs n-1 de x et y nécessaires. les autres calculs seront fais dans des processus implicite.\\
    	Dans l'équation \ref{fc} on identifie $f_{fonctionnement}$. Dans notre modélisation du filtre, sans un signal enable, ce serait la clock qui fournirait cette fréquence. Hors on scrute aussi le signal enable pour activer les bascules, on a donc :\\$f_{fonctionnement}=f_{enable}=44100Khz$, valeur qui est fournit par le module SD.
+=======
+   	On commence par synchroniser le circuit avec une bascule D. Les autres serviront à obtenir les valeurs n-1 nécessaires aux calculs. les autres calculs seront faits dans des processus implicites.\\ % à réécrire
+   	
+   	Dans l'équation \ref{formule_f} on identifie $f_{fonctionnement}$. Dans notre modélisation du filtre, sans un signal enable, ce serait l'horloge qui fournirait cette fréquence. Or, on scrute aussi le signal enable pour activer les bascules. On a donc :\\$f_{fonctionnement}=f_{enable}=44100Khz$, valeur qui est fournie par le module SD.
+>>>>>>> corrections ortho
    	
     \subsection{simulation}
-	Nous avons décidé de préciser la simulation du passe-bas car c'est le bloc de base des autres filtres et comprendre son fonctionnement est indispensable.
+	Nous avons décidé de préciser la simulation du passe-bas car c'est le bloc de base des autres filtres. Il es donc indispensable de comprendre son fonctionnement.
 
     
     \subsubsection{test bench}
-    Pour simuler ce bloc, nous avons créer un testbench basique. Pour rédiger la trame principale nous avons utiliser \cite{lapinoo} puis nous avons complété le testbench de manière a testé le signal d'entrée , le reset, le signal enable et la sortie. Pour ça nous avons imposé des valeurs en entrée, puis nous avons confronté les résultat aux valeurs théoriques calculés à partir de la formule (\ref{formule_f}).\\
+    Pour simuler ce bloc, nous avons créé un «testbench» basique. Pour rédiger la trame principale nous avons utilisé le site internet Lapinoo\cite{lapinoo}. Nous avons ensuite complété le testbench de manière a tester le signal d'entrée , le reset, le signal enable et la sortie. Pour cela nous avons imposé des valeurs en entrée, puis nous avons confronté les résultat aux valeurs théoriques calculées à partir de la formule (\ref{formule_f}).\\
     
     \subsubsection{Simulation et interprétation}
     Voici une capture de la simulation obtenue :
@@ -96,7 +119,7 @@
     	\includegraphics[width=15cm, keepaspectratio=true]{simu_pb_1.PNG}
     	\caption{schéma bloc passe-bas}
 	\end{figure}
-	Sur celle-ci nous pouvons observer plusieurs chose, mais nous allons d'abords scruté les effets du reset et d'enable pour voir si ils répondent aux attentes.
+	Sur celle-ci nous pouvons observer plusieurs choses, mais nous allons d'abords scruté les effets du reset et d'enable pour voir si ils répondent aux attentes.
 	
 	Le signal reset est testé dans la partie la plus à droite délimité par le carré, on voit qu'il remet bien à 0 toute les sorties.
     
@@ -111,7 +134,7 @@
     Pour le passe-haut nous allons utiliser un principe instinctif suivant lequel, modéliser un passe-haut revient à soustraire au signal d'entrée ça valeur filtré dans un passe-bas soit :
     \begin{figure}[h]
     	\centering
-    	\includegraphics[width=12cm, keepaspectratio=true]{passe-haut-simplifie.PNG}
+    	\includegraphics[width=12cm, keepaspectratio=true]{passe-haut-simplifie.png}
     	\caption{schéma bloc passe-haut}
     \end{figure}
 
@@ -123,7 +146,7 @@
 	Pour créer le passe-bande, nous avons mis en série le passe haut et le passe-bas soit:
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=12cm, keepaspectratio=true]{passe_bande_simpli.PNG}
+		\includegraphics[width=12cm, keepaspectratio=true]{passe_bande_simpli.png}
 		\caption{schéma bloc passe-bande}
 	\end{figure}
 
@@ -135,7 +158,7 @@
     
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=10cm, keepaspectratio=true]{DSP.PNG}
+		\includegraphics[width=10cm, keepaspectratio=true]{DSP.png}
 		\caption{schéma DSP}
 	\end{figure}
 	Afin de prouver le bon fonctionnement nous avons tester la réponse impulsionnelle de l'ensemble du bloc DSP. Pour ce faire nous avons fixé l'entrée à une valeur, ici 32768 (en binaire 1000000000000000) et nous avons regarder la sortie des filtres de manière analogique( waveform style -> analog) et on a:
