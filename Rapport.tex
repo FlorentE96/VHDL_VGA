@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{chngcntr}
+\counterwithin*{section}{part}
+
+\title{%
+	Projet d'électronique numérique \\
+	\large{visualiations musicales sur écran VGA}}
+\date\today
+\author{
+	\bsc{LESTANDI Nathan}
+	\and
+	\bsc{ECOCHARD Florent}
+}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \tableofcontents
+    \pagenumbering{arabic}
+    \newpage
+    \part*{Introduction}
+    \addcontentsline{toc}{part}{Introduction}
+    Dans le cadre de l'approffondissment de nos connaissance du langage de description VHDL au cours du semestre 7, nous avons du r
+    \section{Cahier des charges}
+    
+    
+    
+    \section{Architecture}
+    \begin{figure}[h]
+    \includegraphics[width=\textwidth, keepaspectratio=true]{global.png}
+    \caption{\label{global} Schéma global du système}
+    \end{figure}
+    Dans la figure~\ref{global} page~\pageref{global}, …
+    \newpage
+    \part{DSP : analyse du son}
+    \section{Filtre passe-bas}
+    \subsection{modélisation et dimension du filtre}
+    Afin de réaliser un filtre passe-bas le moins encombrant possible et le plus facile à paramatré, nous avons utilisé un filtre exponentielle du première ordre qui s'écrit de la manière suivante: 
+	\begin{center}
+		\begin{equation}
+			y(n)=(1-\epsilon)y(n-1)+x(n)\times\epsilon ,\epsilon \in [0,1]
+		\end{equation}
+	\end{center}    
+    ce filtre correspond à un filtre RC,il ne possède qu'une seul variable : $\epsilon$.\\ Cependant sous cette forme un déphasage est induit dans les haute fréquences. Pour remédier à ce problème,nous allons moyenner l'entrée avec l'échantillon précédent soit :
+	\begin{center}
+		\begin{equation}
+			y(n)=(1-\epsilon)y(n-1)+\frac{x(n)+x(n-1)\times\epsilon}{2}
+		\end{equation}
+	\end{center}  
+    
+    Sachant qu'on travail sur une architecture numérique, il faut éviter les multiplication/divisions. Pour déterminer epsilon nous avons choisit de prendre des valeurs multiple de deux afin de limiter les opérations à des décalages.
+    
+    Les epsilons pour chaque filtre seront déterminer via (https://fiiir.com/ faire la ref). Pour le passe-bas un epsilon de $2^{-4}=0.625$ permettra de couper convenablement les HF tout laissant les opération être de simple décalage
+   	%image
+    \subsection{simulation}
+	Nous avons décidé de préciser la simulation du passe-bas car c'est le bloc de base des autres filtres et comprendre son fonctionnement est indispensable.
+    
+    Pour simuler ce bloc, nous avons rédiger un testbench basique où le signal en entrée est arbitraire, le reset et le signal enable sont aussi testés.
+    
+    %image
+	
+    \section{Filtre passe-haut}
+    Pour le passe-haut nous allons utilisé 
+    %image
+    %\subsection{}
+    %\paragraph{}
+    \section{Filtre passe-bande}
+    %image
+    %\subsection{}
+    %\paragraph{}
+    \part{Visualisations, affichage}
+    %\subsection{}
+    %\paragraph{}    
+    \section{L'"oscilloscope"}
+    %\subsection{}
+    %\paragraph{}    
+    \section{Le "spectrogramme"}
+    %\subsection{}
+    %\paragraph{}    
+    \section{Le bargraph}
+    %\subsection{}
+    %\paragraph{}
+    \part*{Bilan}
+    \addcontentsline{toc}{part}{Bilan}
+  
+\newpage
+\bibliographystyle{plain} % Le style est mis entre accolades.
+\bibliography{bibli} % mon fichier de base de données s'appelle bibli.bib
+https://tomroelandts.com/articles/low-pass-single-pole-iir-filter
+https://fiiir.com/
+http://www.dspguide.com/ch19/2.htm
+\addcontentsline{toc}{section}{Bibliographie}
+
+
+\end{document}
