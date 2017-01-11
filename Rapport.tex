@@ -44,20 +44,26 @@
     \part{DSP : analyse du son}
     \section{Filtre passe-bas}
     \subsection{modélisation et dimension du filtre}
-    Afin de réaliser un filtre passe-bas le moins encombrant possible et le plus facile à paramétrer, nous avons utilisé un filtre exponentielle du première ordre qui s'écrit de la manière suivante: 
+    Afin de réaliser un filtre passe-bas le moins encombrant possible et le plus facile à paramétrer, nous avons utilisé un filtre exponentielle du première ordre qui correspond à un filtre RC classique. En effet dans un RC la formule suivante apparait  : 
+    \begin{center}
+    	\begin{equation}
+    	v_{in}(t)-v_{out}(t)=RC\frac{dv_{out}}{dt}
+    	\end{equation}
+    \end{center}
+	Si on pose $v_{in}=x_n,\ v_{out}=y_n$ et $\frac{dv_{out}}{dt}=\frac{y_n-y_{n-1}}{\Delta_T}$ on obtient
 	\begin{center}
 		\begin{equation}
-			y(n)=(1-\epsilon)y(n-1)+x(n)\times\epsilon ,\epsilon \in [0,1]
+			y(n)=(1-\epsilon)y(n-1)+x(n)\times\epsilon ,\; \epsilon=\frac{\Delta_T}{RC+\Delta_T} \ \in [0,1]
 		\end{equation}
 	\end{center}    
-    ce filtre correspond à un filtre RC,il ne possède qu'une seul variable : $\epsilon$, ça fréquence de coupure est définit par :
+    Le filtre n'est composé que d'une seul variable : $\epsilon$, ça fréquence de coupure est définit par :
     \begin{center}
     	\begin{equation}
     	fc=\frac{-ln(1-\epsilon)}{2\pi}\times f_{fonctionnement}
     	\label{fc}
     	\end{equation}
     \end{center}    
-    Cependant sous cette forme un déphasage est induit dans les haute fréquences. Pour remédier à ce problème,nous allons moyenner l'entrée avec l'échantillon précédent soit :
+    Cependant sous cette forme un déphasage est induit en haute fréquences. Pour remédier à ce problème,nous allons moyenner l'entrée avec l'échantillon précédent soit :
 	\begin{center}
 		\begin{equation}
 			y(n)=(1-\epsilon)y(n-1)+\frac{(x(n)+x(n-1))\times\epsilon}{2}
@@ -73,8 +79,8 @@
     	 		keepaspectratio=true]{filtre_passe_bas.PNG}
     	\caption{\label{passe_bas}schéma bloc passe-bas}
     \end{figure}
-   	On commence par synchronisé le circuit avec une bascule D, puis celle-ci serviront à obtenir les valeurs n-1 nécessaire aux calculs. les autres calculs seront fais dans des processus implicite.\\
-   	Dans l'équation \ref{formule_f} on identifie $f_{fonctionnement}$. Dans notre modélisation du filtre, sans un signal enable, ce serait la clock qui fournirait cette fréquence. Hors on scrute aussi le signal enable pour activer les bascules, on a donc :\\$f_{fonctionnement}=f_{enable}=44100Khz$, valeur qui est fournit par le module SD.
+   	On commence par synchronisé le circuit avec une bascule D, les autres bascules serviront à obtenir les valeurs n-1 de x et y nécessaires. les autres calculs seront fais dans des processus implicite.\\
+   	Dans l'équation \ref{fc} on identifie $f_{fonctionnement}$. Dans notre modélisation du filtre, sans un signal enable, ce serait la clock qui fournirait cette fréquence. Hors on scrute aussi le signal enable pour activer les bascules, on a donc :\\$f_{fonctionnement}=f_{enable}=44100Khz$, valeur qui est fournit par le module SD.
    	
     \subsection{simulation}
 	Nous avons décidé de préciser la simulation du passe-bas car c'est le bloc de base des autres filtres et comprendre son fonctionnement est indispensable.
